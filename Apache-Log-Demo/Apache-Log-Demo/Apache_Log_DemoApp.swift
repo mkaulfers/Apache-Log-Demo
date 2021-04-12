@@ -11,7 +11,7 @@ import SwiftUI
 struct Apache_Log_DemoApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LandingPage()
         }
     }
 }
