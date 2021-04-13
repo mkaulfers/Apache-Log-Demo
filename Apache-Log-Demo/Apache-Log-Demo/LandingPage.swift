@@ -10,40 +10,42 @@ import SwiftUI
 struct LandingPage: View {
     @ObservedObject var landingPageVM = LandingPageViewModel()
     var body: some View {
-        List {
-            ForEach(landingPageVM.eventLogs, id: \.self) { logs in
-                Section(header: Text("Sequences: \(logs.count)")) {
-                    ForEach(logs) { log in
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 30).frame(height: 200).foregroundColor(.white).shadow(radius: 7).overlay(
-                                    HStack {
-                                        VStack(alignment: .leading, spacing: 5){
+        ScrollView {
+            LazyVStack {
+                ForEach(landingPageVM.eventLogs, id: \.self) { logs in
+                    Section(header: Text("Sequences: \(logs.count)")) {
+                        ForEach(logs) { log in
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 30).frame(height: 200).foregroundColor(.white).shadow(radius: 7).overlay(
+                                        HStack {
+                                            VStack(alignment: .leading, spacing: 5){
+                                                Spacer()
+                                                Text("IP Address: " + log.ipAddress).font(.system(size: 8))
+                                                Text("Date: " + log.date).font(.system(size: 8))
+                                                Text("Get Method: " + log.getMethod).font(.system(size: 8))
+                                                Text("Status: " + log.statusCode).font(.system(size: 8))
+                                                Text("Secondary Status: " + log.secondStatusCode).font(.system(size: 8))
+                                                Text("Version Info").font(.system(size: 8))
+                                                Text(log.versionInfo).lineLimit(2).fixedSize(horizontal: false, vertical: true).font(.system(size: 8))
+                                                Spacer()
+                                            }
                                             Spacer()
-                                            Text("IP Address: " + log.ipAddress).font(.system(size: 8))
-                                            Text("Date: " + log.date).font(.system(size: 8))
-                                            Text("Get Method: " + log.getMethod).font(.system(size: 8))
-                                            Text("Status: " + log.statusCode).font(.system(size: 8))
-                                            Text("Secondary Status: " + log.secondStatusCode).font(.system(size: 8))
-                                            Text("Version Info").font(.system(size: 8))
-                                            Text(log.versionInfo).lineLimit(2).fixedSize(horizontal: false, vertical: true).font(.system(size: 8))
-                                            Spacer()
-                                        }
-                                        Spacer()
-                                    }.padding())
-                            }.padding()
+                                        }.padding())
+                                }.padding()
+                        }
                     }
                 }
-            }
-            
-        }.onAppear {
-            landingPageVM.fetchRemoteData()
-        }.fullScreenCover(item: $landingPageVM.activeSheet) { item in
-            switch item {
-            case .loading:
-                ApacheProgressIndicator()
-            case .error:
-                LandingPageErrorModal(landingPageVM: landingPageVM)
-            }
+                
+            }.onAppear {
+                landingPageVM.fetchRemoteData()
+            }.fullScreenCover(item: $landingPageVM.activeSheet) { item in
+                switch item {
+                case .loading:
+                    ApacheProgressIndicator()
+                case .error:
+                    LandingPageErrorModal(landingPageVM: landingPageVM)
+                }
+        }
         }
     }
 }

@@ -65,10 +65,10 @@
 				699827FD26249C9B005AC59E /* LandingPageViewModel.swift */,
 				699828002624C260005AC59E /* EventLog.swift */,
 				69C06F7E2625254500FD8C9F /* ProgressIndicator.swift */,
+				69C06F812625268A00FD8C9F /* LandingPageErrorModal.swift */,
 				699827F026249C36005AC59E /* Assets.xcassets */,
 				699827F526249C36005AC59E /* Info.plist */,
 				699827F226249C36005AC59E /* Preview Content */,
-				69C06F812625268A00FD8C9F /* LandingPageErrorModal.swift */,
 			);
 			path = "Apache-Log-Demo";
 			sourceTree = "<group>";
