@@ -13,6 +13,8 @@
 		699827F426249C36005AC59E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 699827F326249C36005AC59E /* Preview Assets.xcassets */; };
 		699827FE26249C9B005AC59E /* LandingPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699827FD26249C9B005AC59E /* LandingPageViewModel.swift */; };
 		699828012624C260005AC59E /* EventLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699828002624C260005AC59E /* EventLog.swift */; };
+		69C06F7F2625254500FD8C9F /* ProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C06F7E2625254500FD8C9F /* ProgressIndicator.swift */; };
+		69C06F822625268A00FD8C9F /* LandingPageErrorModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C06F812625268A00FD8C9F /* LandingPageErrorModal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		699827F526249C36005AC59E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		699827FD26249C9B005AC59E /* LandingPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingPageViewModel.swift; sourceTree = "<group>"; };
 		699828002624C260005AC59E /* EventLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLog.swift; sourceTree = "<group>"; };
+		69C06F7E2625254500FD8C9F /* ProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressIndicator.swift; sourceTree = "<group>"; };
+		69C06F812625268A00FD8C9F /* LandingPageErrorModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingPageErrorModal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,9 +64,11 @@
 				699827EE26249C35005AC59E /* LandingPage.swift */,
 				699827FD26249C9B005AC59E /* LandingPageViewModel.swift */,
 				699828002624C260005AC59E /* EventLog.swift */,
+				69C06F7E2625254500FD8C9F /* ProgressIndicator.swift */,
 				699827F026249C36005AC59E /* Assets.xcassets */,
 				699827F526249C36005AC59E /* Info.plist */,
 				699827F226249C36005AC59E /* Preview Content */,
+				69C06F812625268A00FD8C9F /* LandingPageErrorModal.swift */,
 			);
 			path = "Apache-Log-Demo";
 			sourceTree = "<group>";
@@ -147,6 +153,8 @@
 				699827FE26249C9B005AC59E /* LandingPageViewModel.swift in Sources */,
 				699828012624C260005AC59E /* EventLog.swift in Sources */,
 				699827EF26249C35005AC59E /* LandingPage.swift in Sources */,
+				69C06F7F2625254500FD8C9F /* ProgressIndicator.swift in Sources */,
+				69C06F822625268A00FD8C9F /* LandingPageErrorModal.swift in Sources */,
 				699827ED26249C35005AC59E /* Apache_Log_DemoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

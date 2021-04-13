@@ -7,21 +7,12 @@
 
 import Foundation
 
-class EventLog: Identifiable {
-    let id = UUID()
+struct EventLog: Identifiable, Hashable  {
+    let id: UUID = UUID()
     let ipAddress: String
     let date: String
     let getMethod: String
     let statusCode: String
     let secondStatusCode: String
     let versionInfo: String
-    
-    init(ipAddress: String, date: String, getMethod: String, statusCode: String, secondStatusCode: String, versionInfo: String ){
-        self.ipAddress = ipAddress
-        self.date = date
-        self.getMethod = getMethod
-        self.statusCode = statusCode
-        self.secondStatusCode = secondStatusCode
-        self.versionInfo = versionInfo
-    }
 }

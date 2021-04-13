@@ -8,19 +8,19 @@
 import Foundation
 
 class LandingPageViewModel: ObservableObject {
-    @Published var eventLogs = [EventLog]()
+    @Published var eventLogs = [[EventLog]]()
     @Published var activeSheet: ActiveSheet?
+    var sortedLogs = [[EventLog]]()
+    var errorMessage = ""
     private let logURL = "https://files.inspiringapps.com/IAChallenge/30E02AAA-B947-4D4B-8FB6-9C57C43872A9/Apache.log"
     
     func fetchRemoteData() {
         activeSheet = .loading
-        // Create destination URL
         let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let destinationFileUrl = documentsUrl.appendingPathComponent("logfile.log")
+        deleteExistingFile(fileName: destinationFileUrl)
         
-        //Create URL to the source file you want to download
         let fileURL = URL(string: logURL)
-        
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         
@@ -28,7 +28,6 @@ class LandingPageViewModel: ObservableObject {
         
         let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
             if let tempLocalUrl = tempLocalUrl, error == nil {
-                // Success
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     print("Successfully downloaded. Status code: \(statusCode)")
                 }
@@ -36,8 +35,8 @@ class LandingPageViewModel: ObservableObject {
                 do {
                     try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl)
                 } catch (let writeError) {
-                    print("Error creating a file \(destinationFileUrl) : \(writeError)")
                     DispatchQueue.main.async {
+                        self.errorMessage = "Error creating a file \(destinationFileUrl) : \(writeError)"
                         self.activeSheet = .error
                     }
                 }
@@ -45,14 +44,11 @@ class LandingPageViewModel: ObservableObject {
             } else {
                 self.activeSheet = nil
                 if let error = error {
-                    print("Error took place while downloading a file. Error description: \(error.localizedDescription)");
+                    self.errorMessage = "Error took place while downloading a file. Error description: \(error.localizedDescription)"
                 } else {
-                    print("Cannot retrieve error description. Unknown error occured.")
+                    self.errorMessage = "Cannot retrieve error description. Unknown error occured."
                 }
                 self.activeSheet = .error
-            }
-            DispatchQueue.main.async {
-                self.activeSheet = nil
             }
             self.parseData()
         }
@@ -62,12 +58,14 @@ class LandingPageViewModel: ObservableObject {
     func parseData() {
         let documentsUrl:URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let destinationFileUrl = documentsUrl.appendingPathComponent("logfile.log")
+        var previousIP = ""
         
         do {
             let contents = try String(contentsOf: destinationFileUrl, encoding: .utf8)
             let lines = contents.split(separator: "\n")
             let pattern = "^((?:\\d+\\.){3,}\\d).*?\\[([^]]*)\\].*?\"([^\"]*)\"\\s*(\\d+)\\s+(\\d+)\\s*\"-\"\\s*\"([^\"]*)\"$"
-            for line in lines {
+            var sequenceCounter = -1
+            for line in lines{
                 let group = String(line).groups(for: pattern)
                 let subGroup = group[0]
                 let ipAddress = subGroup[1]
@@ -76,19 +74,39 @@ class LandingPageViewModel: ObservableObject {
                 let statusCode = subGroup[4]
                 let secondStatusCode = subGroup[5]
                 let versionInfo = subGroup[6]
-                
                 DispatchQueue.main.async {
-                    self.eventLogs.append(EventLog(ipAddress: ipAddress, date: date, getMethod: getMethod, statusCode: statusCode, secondStatusCode: secondStatusCode, versionInfo: versionInfo))
+                    if ipAddress == previousIP {
+                        self.eventLogs[sequenceCounter].append(EventLog(ipAddress: ipAddress, date: date, getMethod: getMethod, statusCode: statusCode, secondStatusCode: secondStatusCode, versionInfo: versionInfo))
+                    } else {
+                        previousIP = ipAddress
+                        sequenceCounter += 1
+                        self.eventLogs.append([EventLog(ipAddress: ipAddress, date: date, getMethod: getMethod, statusCode: statusCode, secondStatusCode: secondStatusCode, versionInfo: versionInfo)])
+                    }
                 }
             }
+            DispatchQueue.main.sync {
+                self.eventLogs.sort { $0.count >= $1.count }
+                self.activeSheet = nil
+            }
+            previousIP = ""
+            sequenceCounter = 0
         } catch {
             print(error.localizedDescription)
         }
     }
     
+    func deleteExistingFile(fileName: URL) {
+        do {
+            try FileManager.default.removeItem(at: fileName)
+        } catch let error as NSError {
+            self.errorMessage = "File did not exist. Perhaps a first run? - \(error.localizedDescription)"
+            self.activeSheet = .error
+        }
+    }
+    
     
     enum ActiveSheet: Identifiable {
-        case loading, error, finished
+        case loading, error
         
         var id: Int {
             hashValue
