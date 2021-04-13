@@ -16,13 +16,18 @@ struct LandingPageErrorModal: View {
                 Spacer()
                 Text("Error:").font(.headline)
                 Text(landingPageVM.errorMessage).multilineTextAlignment(.center)
-                Button("Close", action: {
-                    landingPageVM.activeSheet = nil
-                })
+                Text("Please wait while we create a new file.")
                 Spacer()
             }
+            Spacer()
         }.padding(.horizontal, 30)
         .background(BackgroundBlurView())
         .edgesIgnoringSafeArea(.all)
+    }
+}
+
+struct LandingPageErrorModal_Previews: PreviewProvider {
+    static var previews: some View {
+        LandingPageErrorModal(landingPageVM: LandingPageViewModel())
     }
 }
